@@ -140,21 +140,28 @@ echo $debarch > debian/arch
 # Generate a simple changelog template
 cat <<EOF > debian/changelog
 $sourcename ($packageversion) $distribution; urgency=low
+
   * Custom built Linux kernel.
+
  -- $maintainer  $(date -R)
 EOF
 
 # Generate copyright file
 cat <<EOF > debian/copyright
 This is a packacked upstream version of the Linux kernel.
+
 The sources may be found at most Linux archive sites, including:
 https://www.kernel.org/pub/linux/kernel
+
 Copyright: 1991 - 2018 Linus Torvalds and others.
+
 The git repository for mainline kernel development is at:
 git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; version 2 dated June, 1991.
+
 On Debian GNU/Linux systems, the complete text of the GNU General Public
 License version 2 can be found in \`/usr/share/common-licenses/GPL-2'.
 EOF
@@ -167,11 +174,13 @@ Priority: optional
 Maintainer: $maintainer
 Build-Depends: bc, kmod, cpio
 Homepage: http://www.kernel.org/
+
 Package: $packagename
 Architecture: $debarch
 Description: Linux kernel, version $version
  This package contains the Linux kernel, modules and corresponding other
  files, version: $version.
+
 Package: $kernel_headers_packagename
 Architecture: $debarch
 Depends: make, gcc, libc6-dev, flex, bison, libssl-dev
@@ -179,6 +188,7 @@ Description: Linux kernel headers for $version on $debarch
  This package provides kernel header files for $version on $debarch
  .
  This is useful for people who need to build external modules
+
 Package: linux-libc-dev
 Section: devel
 Provides: linux-kernel-headers
@@ -186,12 +196,14 @@ Architecture: $debarch
 Description: Linux support headers for userspace development
  This package provides userspaces headers from the Linux kernel.  These headers
  are used by the installed headers for GNU glibc and other system libraries.
+
 Package: $dbg_packagename
 Section: debug
 Architecture: $debarch
 Description: Linux kernel debugging symbols for $version
  This package will come in handy if you need to debug the kernel. It provides
  all the necessary debug symbols for the kernel and its modules.
+
 Package: $dtb_packagename
 Architecture: $debarch
 Description: Linux DTB, version $version
@@ -200,15 +212,19 @@ EOF
 
 cat <<EOF > debian/rules
 #!$(command -v $MAKE) -f
+
 build:
 	\$(MAKE) KERNELRELEASE=${version} ARCH=${ARCH} \
 	KBUILD_BUILD_VERSION=${revision} KBUILD_SRC=
+
 binary-arch:
 	\$(MAKE) KERNELRELEASE=${version} ARCH=${ARCH} \
 	KBUILD_BUILD_VERSION=${revision} KBUILD_SRC= intdeb-pkg
+
 clean:
 	rm -rf debian/*tmp debian/files
 	\$(MAKE) clean
+
 binary: binary-arch
 EOF
 
